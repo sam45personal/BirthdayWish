@@ -1,0 +1,192 @@
+/* =========================================================
+   PAGE 6 — SPIRAL SCRAPBOOK LOOK
+   Import / paste AFTER Page6.css and Page6.album.css.
+   Pure restyle: no JSX changes needed.
+========================================================= */
+
+/* ---------- no leather cover: open album on the table ---------- */
+
+.memory-book::before,
+.memory-book::after,
+.book-stitch,
+.book-corner,
+.book-ribbon {
+  display: none;
+}
+
+/* ---------- aged paper ---------- */
+
+.memory-page {
+  background:
+    radial-gradient(
+      circle at 15% 12%,
+      rgba(255, 255, 255, 0.55),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 92%,
+      rgba(150, 90, 60, 0.28),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 52%,
+      rgba(160, 100, 70, 0.2) 100%
+    ),
+    linear-gradient(150deg, #f4ddce, #e9cab7 55%, #d9b49e);
+}
+
+.memory-page::after {
+  display: none;
+}
+
+.memory-page-left {
+  box-shadow:
+    inset -26px 0 22px -16px rgba(95, 48, 42, 0.5),
+    inset 0 0 26px rgba(128, 69, 73, 0.14),
+    -2px 2px 0 #efd9ca,
+    -4px 4px 0 #e0c4b2,
+    -6px 6px 0 #cdaa97;
+}
+
+.memory-page-right {
+  box-shadow:
+    inset 26px 0 22px -16px rgba(95, 48, 42, 0.5),
+    inset 0 0 26px rgba(128, 69, 73, 0.14),
+    2px 2px 0 #efd9ca,
+    4px 4px 0 #e0c4b2,
+    6px 6px 0 #cdaa97;
+}
+
+/* coffee ring on the left page */
+
+.memory-page-left .memory-page-inner::before {
+  content: "";
+  position: absolute;
+  right: 12%;
+  bottom: 7%;
+  width: 36px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(140, 85, 45, 0.24);
+  box-shadow: inset 0 0 6px rgba(140, 85, 45, 0.16);
+  filter: blur(0.4px);
+  pointer-events: none;
+}
+
+/* dried white flower sprig, top corner of the left page */
+
+.memory-page-left .memory-page-inner::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: -3px;
+  width: 46px;
+  height: 58px;
+  z-index: 6;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 30% 22%, #fff 0 4px, transparent 4.6px),
+    radial-gradient(circle at 58% 32%, #fffaf6 0 4.6px, transparent 5.2px),
+    radial-gradient(circle at 38% 50%, #fff 0 4px, transparent 4.6px),
+    radial-gradient(circle at 68% 60%, #fffaf6 0 3.6px, transparent 4.2px),
+    radial-gradient(circle at 30% 22%, #e7c76b 0 1.2px, transparent 1.6px),
+    radial-gradient(circle at 58% 32%, #e7c76b 0 1.3px, transparent 1.7px),
+    linear-gradient(200deg, transparent 38%, #6f8a52 38% 42%, transparent 42%);
+  filter: drop-shadow(0 2px 2px rgba(60, 30, 30, 0.35));
+}
+
+/* ---------- polaroid frame (caption lives in the white strip) ---------- */
+
+.memory-photo-area {
+  padding: 7px 7px 6px;
+  background: linear-gradient(160deg, #fffdf8, #f3e9dd);
+  box-shadow:
+    inset 0 1px #fff,
+    0 9px 16px rgba(60, 25, 25, 0.32),
+    0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+.memory-caption {
+  min-height: 2.3em;
+  margin: 6px 3px 2px;
+  color: #5a3a40;
+}
+
+/* washi tape on the diagonal corners, like the reference */
+
+.photo-tape {
+  width: 52px;
+  height: 16px;
+  top: 0;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.38) 0 2px,
+      transparent 2px 7px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(246, 150, 185, 0.78),
+      rgba(230, 120, 165, 0.72)
+    );
+}
+
+.photo-tape-left {
+  left: -10px;
+  transform: rotate(-38deg);
+}
+
+.photo-tape-right {
+  right: -10px;
+  transform: rotate(38deg);
+}
+
+/* ---------- spiral binding ---------- */
+
+.book-binding {
+  width: 30px;
+  top: 4px;
+  bottom: 4px;
+  padding: 10px 0;
+  border-radius: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(50, 22, 18, 0),
+    rgba(50, 22, 18, 0.38) 50%,
+    rgba(50, 22, 18, 0)
+  );
+  box-shadow: none;
+}
+
+.book-binding span {
+  width: 42px;
+  height: 12px;
+  border-radius: 0;
+  box-shadow: none;
+  transform: rotate(-12deg);
+  filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, 0.5));
+  background:
+    /* brass wire */
+    linear-gradient(
+      180deg,
+      transparent 33%,
+      #f8e0a8 35%,
+      #b78542 55%,
+      #6a4a22 66%,
+      transparent 68%
+    ),
+    /* punched holes either side of the wire */
+    radial-gradient(
+      circle at 5px 50%,
+      #1b0a08 0 3.6px,
+      rgba(255, 230, 210, 0.4) 4px 4.8px,
+      transparent 5.2px
+    ),
+    radial-gradient(
+      circle at calc(100% - 5px) 50%,
+      #1b0a08 0 3.6px,
+      rgba(255, 230, 210, 0.4) 4px 4.8px,
+      transparent 5.2px
+    );
+}

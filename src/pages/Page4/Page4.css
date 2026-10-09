@@ -1,0 +1,601 @@
+/* =========================================================
+   PAGE 4 · GIFT HUB  (redesigned)
+   Same class names as before, so it's a drop-in replacement.
+
+   Main fix: the cards used to sit right under the heading and
+   covered the glowing gift box in the background. They are now
+   pinned to the wooden table at the bottom, so the box, the
+   signs and the heart stay visible above them.
+
+   Optional, for the best look add to <head>:
+   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+   ========================================================= */
+
+.page4 {
+  --p4-rose: #ff8fc2;
+  --p4-rose-soft: #ffc4dc;
+  --p4-serif: "Cormorant Garamond", Georgia, serif;
+
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  color: #fff;
+  isolation: isolate;
+}
+
+/* =========================================================
+   BACKGROUND (slow cinematic drift + a touch more richness)
+   ========================================================= */
+
+.page4-background {
+  position: fixed;
+  inset: 0;
+  z-index: -5;
+  background-image: url("../../assets/backgrounds/page4-bg.png");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  filter: saturate(1.08) contrast(1.03);
+  transform: scale(1.02);
+  animation: p4-drift 32s ease-in-out infinite alternate;
+}
+
+@keyframes p4-drift {
+  to { transform: scale(1.06) translate3d(-0.6%, -0.5%, 0); }
+}
+
+/* =========================================================
+   CINEMATIC OVERLAY
+   Light in the middle (so the gift box glows), darker at the
+   bottom where the cards sit, soft vignette around the edges.
+   ========================================================= */
+
+.page4-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(3, 1, 8, 0.5) 100%),
+    linear-gradient(180deg,
+      rgba(4, 2, 10, 0.5) 0%,
+      rgba(4, 2, 9, 0.08) 24%,
+      rgba(5, 2, 9, 0.05) 50%,
+      rgba(5, 2, 10, 0.4) 68%,
+      rgba(3, 1, 7, 0.78) 100%);
+}
+
+/* the gift box breathes with warm light, and gold sparkles rise from it */
+.page4::before,
+.page4::after {
+  content: "";
+  position: fixed;
+  z-index: -3;
+  pointer-events: none;
+}
+
+.page4::before {
+  top: 51%;
+  left: 51%;
+  width: 340px;
+  height: 280px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  background: radial-gradient(ellipse at center, rgba(255, 190, 110, 0.5), rgba(255, 90, 140, 0.18) 48%, transparent 72%);
+  filter: blur(10px);
+  animation: p4-box-glow 3.4s ease-in-out infinite;
+}
+
+@keyframes p4-box-glow {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.92); }
+  50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.page4::after {
+  inset: 0;
+  background-repeat: no-repeat;
+  background-image:
+    radial-gradient(circle at 44% 52%, rgba(255, 230, 170, 0.95) 0 1.6px, transparent 4px),
+    radial-gradient(circle at 56% 47%, rgba(255, 200, 220, 0.95) 0 1.4px, transparent 4px),
+    radial-gradient(circle at 50% 56%, rgba(255, 235, 180, 0.9) 0 1.2px, transparent 3.5px),
+    radial-gradient(circle at 38% 42%, rgba(255, 210, 225, 0.85) 0 1px, transparent 3px),
+    radial-gradient(circle at 62% 41%, rgba(255, 230, 170, 0.85) 0 1.3px, transparent 3.5px);
+  animation: p4-sparkle 5s ease-in infinite;
+}
+
+@keyframes p4-sparkle {
+  0%   { opacity: 0;   transform: translate3d(0, 24px, 0); }
+  25%  { opacity: 1; }
+  100% { opacity: 0;   transform: translate3d(6px, -90px, 0); }
+}
+
+/* =========================================================
+   TOP BACK BUTTON + MUSIC
+   ========================================================= */
+
+.page4-back,
+.page4-music {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  border: 1px solid rgba(255, 215, 231, 0.26);
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(40, 14, 38, 0.66), rgba(12, 4, 15, 0.7));
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  color: rgba(255, 240, 247, 0.94);
+  font-family: var(--p4-serif);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.page4-back  { left: 16px;  padding: 8px 14px 8px 10px; }
+.page4-music { right: 16px; padding: 8px 14px; color: #ffe5ef; }
+
+.page4-back:hover,
+.page4-music:hover { transform: translateY(-1px); border-color: rgba(255, 160, 200, 0.55); }
+
+.page4-back:active,
+.page4-music:active { transform: scale(0.95); }
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.page4-content {
+  position: relative;
+  z-index: 5;
+  width: min(100%, 430px);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 66px 17px calc(18px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   HEADER (compact, so the background signs stay visible)
+   ========================================================= */
+
+.page4-header {
+  text-align: center;
+  text-shadow: 0 3px 20px rgba(0, 0, 0, 0.75);
+  animation: p4-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
+}
+
+@keyframes p4-in {
+  from { opacity: 0; transform: translateY(16px); filter: blur(5px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+.page4-mini-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-bottom: 5px;
+  color: #ff9fc4;
+}
+
+.page4-mini-line span {
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 175, 208, 0.8));
+}
+.page4-mini-line span:last-child { transform: scaleX(-1); }
+
+.page4-eyebrow {
+  margin: 0 0 4px;
+  color: rgba(255, 200, 222, 0.95);
+  font-family: system-ui, sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.page4-header h1 {
+  position: relative;
+  margin: 0;
+  color: #fff4f9;
+  font-family: var(--p4-serif);
+  font-size: clamp(34px, 10vw, 44px);
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-shadow: 0 3px 25px rgba(0, 0, 0, 0.75), 0 0 26px rgba(255, 114, 174, 0.3);
+}
+
+.page4-header h1 em {
+  font-style: italic;
+  font-weight: 500;
+  background: linear-gradient(100deg, #ff9cc2 10%, #ffd6e6 45%, #ff8db8 80%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 14px rgba(255, 90, 160, 0.5));
+  animation: p4-shimmer 6s linear infinite;
+}
+
+@keyframes p4-shimmer { to { background-position: -200% 0; } }
+
+.page4-heading-heart {
+  display: inline-block;
+  margin-left: 3px;
+  color: #ff78ad;
+  font-family: Georgia, serif;
+  font-size: 28px;
+  transform: translateY(-5px) rotate(-10deg);
+  text-shadow: 0 0 18px rgba(255, 80, 147, 0.85);
+  animation: p4-beat 2.2s ease-in-out infinite;
+}
+
+@keyframes p4-beat {
+  0%, 100% { transform: translateY(-5px) rotate(-10deg) scale(1); }
+  14%      { transform: translateY(-5px) rotate(-10deg) scale(1.22); }
+  28%      { transform: translateY(-5px) rotate(-10deg) scale(1); }
+  42%      { transform: translateY(-5px) rotate(-10deg) scale(1.12); }
+}
+
+.page4-intro {
+  margin: 8px auto 0;
+  max-width: 310px;
+  color: rgba(255, 241, 247, 0.9);
+  font-family: var(--p4-serif);
+  font-size: 14.5px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.32;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+.page4-intro span { color: #ffa5c4; }
+
+/* =========================================================
+   GIFT CARDS (pinned to the wooden table)
+   ========================================================= */
+
+.page4-gifts {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: auto;      /* pushes the cards to the bottom, below the gift box */
+  padding-top: 14px;
+}
+
+/* =========================================================
+   CARD
+   --gc is the card's accent colour (R, G, B)
+   ========================================================= */
+
+.gift-card {
+  --gc: 255, 143, 190;
+
+  position: relative;
+  width: 100%;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px 10px 12px;
+  border: 1px solid rgba(var(--gc), 0.38);
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(var(--gc), 0.16), transparent 55%),
+    linear-gradient(135deg, rgba(48, 9, 32, 0.8), rgba(14, 4, 17, 0.78));
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 3px 0 0 rgba(var(--gc), 0.75),
+    0 14px 32px rgba(0, 0, 0, 0.42),
+    0 0 22px rgba(var(--gc), 0.14);
+  color: #fff;
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.22s cubic-bezier(0.3, 1.4, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  animation: p4-card-in 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.gift-card-rose   { --gc: 255, 143, 190; }
+.gift-card-gold   { --gc: 245, 196, 110; }
+.gift-card-violet { --gc: 178, 148, 245; }
+
+.page4-gifts > :nth-child(1) { animation-delay: 0.5s; }
+.page4-gifts > :nth-child(2) { animation-delay: 0.7s; }
+.page4-gifts > :nth-child(3) { animation-delay: 0.9s; }
+
+@keyframes p4-card-in {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* glass shine + a light sweep that crosses the card now and then */
+.gift-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.14) 50%, transparent 65%) -160% 0 / 260% 100% no-repeat,
+    linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 40%);
+  animation: p4-sheen 7s ease-in-out infinite;
+}
+
+.page4-gifts > :nth-child(2)::before { animation-delay: 1.2s; }
+.page4-gifts > :nth-child(3)::before { animation-delay: 2.4s; }
+
+@keyframes p4-sheen {
+  0%, 50% { background-position: -160% 0, 0 0; }
+  100%    { background-position: 160% 0, 0 0; }
+}
+
+.gift-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(var(--gc), 0.7);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 3px 0 0 rgba(var(--gc), 1),
+    0 18px 36px rgba(0, 0, 0, 0.46),
+    0 0 36px rgba(var(--gc), 0.38);
+}
+
+.gift-card:active { transform: scale(0.97); }
+
+.gift-card:focus-visible { outline: 2px solid rgba(255, 200, 230, 0.9); outline-offset: 3px; }
+
+/* =========================================================
+   CARD GLOW
+   ========================================================= */
+
+.gift-card-glow {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  right: -55px;
+  top: -55px;
+  border-radius: 50%;
+  filter: blur(28px);
+  opacity: 0.7;
+  pointer-events: none;
+  background: rgba(var(--gc), 0.4);
+  animation: p4-card-breathe 4s ease-in-out infinite;
+}
+
+@keyframes p4-card-breathe {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 0.85; }
+}
+
+/* keep the old per-colour rules working too */
+.gift-card-rose   .gift-card-glow { background: rgba(241, 87, 145, 0.42); }
+.gift-card-gold   .gift-card-glow { background: rgba(235, 177, 78, 0.4); }
+.gift-card-violet .gift-card-glow { background: rgba(150, 106, 230, 0.42); }
+
+/* =========================================================
+   NUMBER
+   ========================================================= */
+
+.gift-number {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  color: rgba(255, 255, 255, 0.32);
+  font-family: var(--p4-serif);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.gift-icon-wrap {
+  position: relative;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: radial-gradient(circle at 32% 28%, rgba(var(--gc), 0.38), rgba(var(--gc), 0.1));
+  border: 1px solid rgba(var(--gc), 0.38);
+  color: rgb(var(--gc));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 18px rgba(var(--gc), 0.28);
+  transition: transform 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+.gift-card:hover .gift-icon-wrap { transform: rotate(-6deg) scale(1.08); }
+
+/* kept for compatibility with your old colour rules */
+.gift-card-rose   .gift-icon-wrap { color: #ff9fc3; }
+.gift-card-gold   .gift-icon-wrap { color: #f5cf8a; }
+.gift-card-violet .gift-icon-wrap { color: #c4aefa; }
+
+.gift-icon {
+  filter: drop-shadow(0 0 8px currentColor);
+  animation: p4-icon-float 3.4s ease-in-out infinite;
+}
+
+@keyframes p4-icon-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
+}
+
+/* =========================================================
+   CARD COPY
+   ========================================================= */
+
+.gift-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+  padding-right: 24px;
+}
+
+.gift-title {
+  color: #fff3f8;
+  font-family: var(--p4-serif);
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+}
+
+.gift-subtitle {
+  margin-top: 4px;
+  color: rgba(255, 233, 242, 0.78);
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gift-open {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+  color: rgba(255, 200, 220, 0.98);
+  font-family: var(--p4-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.gift-open svg {
+  transition: transform 0.2s ease;
+  animation: p4-nudge 1.9s ease-in-out infinite;
+}
+
+@keyframes p4-nudge {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(3px); }
+}
+
+.gift-card:hover .gift-open svg,
+.gift-card:active .gift-open svg {
+  animation: none;
+  transform: translateX(5px);
+}
+
+/* =========================================================
+   BOTTOM
+   ========================================================= */
+
+.page4-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  color: rgba(255, 226, 238, 0.88);
+  font-family: var(--p4-serif);
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 500;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+  animation: p4-in 0.9s ease 1.2s both;
+}
+
+.page4-bottom svg {
+  color: #ff9dbc;
+  animation: p4-beat-sm 2.6s ease-in-out infinite;
+}
+
+@keyframes p4-beat-sm {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.2); }
+}
+
+/* =========================================================
+   SHORT MOBILE (cards shrink so the box stays visible)
+   ========================================================= */
+
+@media (max-height: 740px) {
+  .page4-content { padding-top: 60px; }
+  .page4-header h1 { font-size: 32px; }
+  .page4-intro { margin-top: 6px; font-size: 13px; }
+  .page4-gifts { gap: 7px; padding-top: 10px; }
+  .gift-card { min-height: 70px; padding: 8px 12px 8px 10px; }
+  .gift-icon-wrap { width: 40px; height: 40px; flex-basis: 40px; border-radius: 14px; }
+  .gift-title { font-size: 18px; }
+  .gift-subtitle { margin-top: 3px; font-size: 10px; }
+  .gift-open { margin-top: 3px; font-size: 12px; }
+  .page4-bottom { margin-top: 8px; font-size: 12px; }
+}
+
+/* very short screens: drop the second line of each description */
+@media (max-height: 640px) {
+  .gift-subtitle { -webkit-line-clamp: 1; }
+  .gift-card { min-height: 62px; }
+}
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .page4-content { padding-left: 13px; padding-right: 13px; }
+  .page4-header h1 { font-size: 31px; }
+  .gift-card { min-height: 68px; }
+  .gift-title { font-size: 17px; }
+  .gift-subtitle { font-size: 10px; }
+}
+
+/* =========================================================
+   LARGER PHONES
+   ========================================================= */
+
+@media (min-width: 400px) {
+  .page4-content { padding-left: 20px; padding-right: 20px; }
+  .gift-card { min-height: 84px; }
+  .gift-title { font-size: 22px; }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .page4-background,
+  .page4::before,
+  .page4::after,
+  .page4-header,
+  .page4-header h1 em,
+  .page4-heading-heart,
+  .gift-card,
+  .gift-card::before,
+  .gift-card-glow,
+  .gift-icon,
+  .gift-open svg,
+  .page4-bottom,
+  .page4-bottom svg {
+    animation: none;
+    transition: none;
+  }
+}

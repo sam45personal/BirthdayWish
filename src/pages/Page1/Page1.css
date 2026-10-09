@@ -1,0 +1,559 @@
+/* =========================================================
+   PAGE 1 · MOBILE WELCOME  (redesigned)
+   Same class names as before, so it's a drop-in replacement.
+
+   Optional, for the best look add to <head>:
+   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+   (Without it the fonts fall back to your old ones.)
+========================================================= */
+
+@property --p1-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.page1 {
+  --p1-rose: #ff8fc2;
+  --p1-rose-soft: #ffc9e2;
+  --p1-rose-deep: #e0488f;
+  --p1-glass: rgba(255, 255, 255, 0.085);
+  --p1-script: "Great Vibes", "Brush Script MT", "Segoe Script", cursive;
+  --p1-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: env(safe-area-inset-top);
+  padding-right: 16px;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: 16px;
+
+  /* background image is supplied from Page1.jsx */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* =========================================================
+   ATMOSPHERIC OVERLAY: soft vignette + glow behind the card
+========================================================= */
+
+.page1-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 50%, rgba(255, 120, 190, 0.16), transparent 70%),
+    radial-gradient(ellipse at center, transparent 50%, rgba(8, 2, 22, 0.42) 100%),
+    linear-gradient(180deg, rgba(5, 3, 20, 0.10) 0%, rgba(8, 3, 20, 0.04) 55%, rgba(8, 3, 20, 0.22) 100%);
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.page1-content {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  animation: p1-rise 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes p1-rise {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
+.secret-card {
+  position: relative;
+  width: 100%;
+  padding: 40px 22px 24px;
+  border-radius: 32px;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+
+  /* frosted glass, still see-through so the scene shows */
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04) 45%, rgba(255, 150, 210, 0.07));
+  backdrop-filter: blur(4px) saturate(135%);
+  -webkit-backdrop-filter: blur(4px) saturate(135%);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+    0 18px 50px rgba(0, 0, 0, 0.28),
+    0 0 36px rgba(255, 130, 200, 0.16);
+
+  transition: box-shadow 0.5s ease, border-color 0.4s ease;
+}
+
+/* diagonal glass reflection + slow light sweep */
+.secret-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.16) 45%, transparent 60%) -150% 0 / 250% 100% no-repeat,
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 38%, transparent 70%);
+  animation: p1-sheen 7s ease-in-out infinite;
+}
+
+@keyframes p1-sheen {
+  0%, 45% { background-position: -150% 0, 0 0; }
+  100%    { background-position: 150% 0, 0 0; }
+}
+
+/* glowing rotating rim light (falls back to nothing if unsupported) */
+.secret-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(from var(--p1-angle), transparent 0 55%, rgba(255, 170, 220, 0.9) 75%, rgba(255, 255, 255, 0.95) 80%, transparent 90%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: p1-spin 6s linear infinite;
+}
+
+@keyframes p1-spin {
+  to { --p1-angle: 360deg; }
+}
+
+/* =========================================================
+   TOP HEART  (glowing orb with halo)
+========================================================= */
+
+.card-heart {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #ffd0e8;
+  text-shadow: 0 0 10px rgba(255, 100, 190, 0.95), 0 0 26px rgba(255, 70, 180, 0.6);
+  z-index: 2;
+  animation: p1-heartbeat 2.4s ease-in-out infinite;
+}
+
+.card-heart::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 110, 190, 0.45), transparent 70%);
+  filter: blur(4px);
+}
+
+@keyframes p1-heartbeat {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  14%      { transform: translateX(-50%) scale(1.2); }
+  28%      { transform: translateX(-50%) scale(1); }
+  42%      { transform: translateX(-50%) scale(1.12); }
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.secret-card h1 {
+  margin: 22px 0 6px;
+  font-family: var(--p1-script);
+  font-size: clamp(44px, 12vw, 56px);
+  font-weight: 400;
+  line-height: 1;
+  background: linear-gradient(100deg, #fff 10%, #ffd3e8 40%, #ffffff 55%, #ffb4d6 90%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 10px rgba(255, 150, 215, 0.65)) drop-shadow(0 2px 14px rgba(255, 70, 170, 0.4));
+  animation: p1-shimmer 7s linear infinite;
+}
+
+@keyframes p1-shimmer {
+  to { background-position: -220% 0; }
+}
+
+/* =========================================================
+   SUBTITLE
+========================================================= */
+
+.card-subtitle {
+  margin: 0 0 20px;
+  font-family: var(--p1-serif);
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.45;
+  color: rgba(255, 246, 251, 0.94);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   CODE LABEL (divider lines fade out at the sides)
+========================================================= */
+
+.code-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 10px;
+  color: rgba(255, 246, 251, 0.96);
+  font-family: var(--p1-serif);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+
+.code-label::before,
+.code-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 210, 232, 0.55) 30%, rgba(255, 210, 232, 0.55) 70%, transparent);
+}
+.code-label::before { top: 0; }
+.code-label::after  { bottom: 0; }
+
+/* code entry display (dots / digits container) */
+.code-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* =========================================================
+   KEYPAD
+========================================================= */
+
+.secret-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  gap: 13px;
+  width: 100%;
+  margin: 18px auto 18px;
+}
+
+/* =========================================================
+   KEYPAD BUTTON  (glossy glass bubble)
+========================================================= */
+
+.keypad-button {
+  position: relative;
+  width: clamp(56px, 17vw, 64px);
+  height: clamp(56px, 17vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.62), rgba(255, 190, 228, 0.28) 34%, rgba(255, 90, 175, 0.12) 74%),
+    rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-family: var(--p1-serif);
+  font-size: 25px;
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgba(160, 30, 100, 0.55);
+  cursor: pointer;
+  box-shadow:
+    inset 0 2px 8px rgba(255, 255, 255, 0.34),
+    inset 0 -5px 12px rgba(255, 70, 160, 0.14),
+    0 6px 18px rgba(255, 80, 170, 0.2);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  outline: none;
+  transition: transform 0.18s cubic-bezier(0.3, 1.5, 0.5, 1), box-shadow 0.25s ease, background 0.25s ease;
+  animation: p1-pop 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) both;
+}
+
+/* small gloss highlight on top of each bubble */
+.keypad-button::before {
+  content: "";
+  position: absolute;
+  top: 6%;
+  left: 18%;
+  width: 64%;
+  height: 34%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent);
+  pointer-events: none;
+}
+
+/* staggered entrance */
+.keypad-button:nth-child(1)  { animation-delay: 0.15s; }
+.keypad-button:nth-child(2)  { animation-delay: 0.20s; }
+.keypad-button:nth-child(3)  { animation-delay: 0.25s; }
+.keypad-button:nth-child(4)  { animation-delay: 0.30s; }
+.keypad-button:nth-child(5)  { animation-delay: 0.35s; }
+.keypad-button:nth-child(6)  { animation-delay: 0.40s; }
+.keypad-button:nth-child(7)  { animation-delay: 0.45s; }
+.keypad-button:nth-child(8)  { animation-delay: 0.50s; }
+.keypad-button:nth-child(9)  { animation-delay: 0.55s; }
+.keypad-button:nth-child(10) { animation-delay: 0.60s; }
+.keypad-button:nth-child(11) { animation-delay: 0.65s; }
+.keypad-button:nth-child(12) { animation-delay: 0.70s; }
+
+@keyframes p1-pop {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* tiny heart on number keys */
+.key-number::after {
+  content: "♡";
+  position: absolute;
+  right: 22%;
+  bottom: 14%;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+  text-shadow: none;
+}
+
+.keypad-button:hover {
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.75), rgba(255, 190, 228, 0.4) 34%, rgba(255, 90, 175, 0.2) 74%),
+    rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 2px 10px rgba(255, 255, 255, 0.45),
+    0 0 28px rgba(255, 100, 190, 0.5),
+    0 6px 18px rgba(255, 80, 170, 0.25);
+}
+
+/* press feedback */
+.keypad-button:active {
+  transform: scale(0.88);
+  box-shadow:
+    inset 0 3px 10px rgba(180, 30, 110, 0.3),
+    0 0 34px rgba(255, 110, 195, 0.7);
+}
+
+.keypad-button:focus-visible {
+  outline: 2px solid rgba(255, 200, 230, 0.9);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   HINT
+========================================================= */
+
+.secret-hint {
+  margin: 2px 0 0;
+  font-family: var(--p1-script);
+  font-size: 21px;
+  line-height: 1.35;
+  color: rgba(255, 240, 248, 0.82);
+  text-shadow: 0 0 12px rgba(255, 120, 190, 0.45);
+}
+
+/* =========================================================
+   ERROR STATE  (gentle shake + rose glow)
+========================================================= */
+
+.secret-card.error {
+  border-color: rgba(255, 130, 180, 0.7);
+  box-shadow:
+    0 0 40px rgba(255, 60, 130, 0.38),
+    0 25px 70px rgba(0, 0, 0, 0.38),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  animation: p1-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes p1-shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+
+.error-message {
+  margin: 12px 0 0;
+  font-family: var(--p1-serif);
+  font-size: 15px;
+  font-style: italic;
+  color: #ffd9ea;
+  text-shadow: 0 0 12px rgba(255, 100, 170, 0.7);
+  animation: p1-fade 0.4s ease both;
+}
+
+@keyframes p1-fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   SUCCESS STATE  (warm bloom)
+========================================================= */
+
+.secret-card.success {
+  border-color: rgba(255, 220, 240, 0.8);
+  box-shadow:
+    0 0 60px rgba(255, 130, 210, 0.7),
+    0 0 130px rgba(255, 80, 180, 0.4),
+    inset 0 0 30px rgba(255, 190, 230, 0.25);
+  animation: p1-bloom 0.9s ease-out both;
+}
+
+@keyframes p1-bloom {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.035); }
+  100% { transform: scale(1); }
+}
+
+/* =========================================================
+   FALLING PETALS  (sway + soft depth)
+========================================================= */
+
+.page1-petals {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.page1-petal {
+  position: absolute;
+  top: -20px;
+  border-radius: 100% 0 100% 0;
+  background: linear-gradient(135deg, rgba(255, 215, 235, 0.9), rgba(255, 140, 195, 0.7));
+  filter: drop-shadow(0 0 6px rgba(255, 100, 180, 0.4));
+  animation: page1-petal-fall linear infinite;
+}
+
+/* every 3rd petal is softer and "further away" */
+.page1-petal:nth-child(3n) { filter: blur(1.2px) drop-shadow(0 0 6px rgba(255, 100, 180, 0.3)); opacity: 0.8; }
+
+@keyframes page1-petal-fall {
+  0%   { transform: translate3d(0, -20px, 0) rotate(0deg);        opacity: 0; }
+  10%  { opacity: 0.9; }
+  35%  { transform: translate3d(30px, 35vh, 0) rotate(130deg); }
+  65%  { transform: translate3d(-10px, 72vh, 0) rotate(250deg); }
+  100% { transform: translate3d(50px, 110vh, 0) rotate(380deg);   opacity: 0; }
+}
+
+/* =========================================================
+   UNLOCK OVERLAY  (heart blooms in)
+========================================================= */
+
+.unlock-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(255, 110, 190, 0.36), rgba(20, 5, 35, 0.55));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: none;
+  animation: p1-fade-in 0.5s ease both;
+}
+
+.unlock-overlay div {
+  font-size: 96px;
+  color: #ffc2e2;
+  text-shadow: 0 0 24px rgba(255, 100, 190, 0.95), 0 0 70px rgba(255, 80, 180, 0.85);
+  animation: p1-heart-bloom 1.1s cubic-bezier(0.2, 1.2, 0.4, 1) both;
+}
+
+@keyframes p1-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes p1-heart-bloom {
+  0%   { transform: scale(0.2); opacity: 0; }
+  60%  { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* =========================================================
+   SHORT MOBILE SCREENS
+========================================================= */
+
+@media (max-height: 720px) {
+  .page1 { padding-top: 10px; padding-bottom: 10px; }
+  .page1-content { max-width: 330px; }
+  .secret-card { padding-top: 34px; padding-bottom: 18px; }
+  .secret-card h1 { margin-top: 18px; font-size: 42px; }
+  .card-subtitle { margin-bottom: 12px; font-size: 16px; }
+  .code-label { padding: 10px; font-size: 14px; }
+  .secret-keypad { gap: 8px; margin-top: 12px; margin-bottom: 10px; }
+  .keypad-button { width: 52px; height: 52px; font-size: 22px; }
+  .secret-hint { font-size: 18px; }
+}
+
+/* =========================================================
+   VERY SMALL WIDTH DEVICES
+========================================================= */
+
+@media (max-width: 360px) {
+  .page1 { padding-left: 10px; padding-right: 10px; }
+  .page1-content { max-width: 320px; }
+  .secret-card { padding-left: 18px; padding-right: 18px; border-radius: 26px; }
+  .secret-keypad { gap: 8px; }
+  .keypad-button { width: 50px; height: 50px; font-size: 21px; }
+  .code-display { gap: 12px; }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .page1-content,
+  .secret-card,
+  .secret-card::before,
+  .secret-card::after,
+  .secret-card h1,
+  .card-heart,
+  .keypad-button,
+  .error-message,
+  .page1-petal,
+  .unlock-overlay,
+  .unlock-overlay div {
+    animation: none;
+  }
+}
