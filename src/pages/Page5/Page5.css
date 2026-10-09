@@ -1,880 +1,1684 @@
 /* =========================================================
+
    PAGE 5 · Cinematic Letter Scene  (v2, tuned to the new background)
+
    Same class names as before, so drop-in replacement.
 
    Designed around the photo: moon + lake at the top, the empty
+
    wooden table in the lower middle. The letter now rests ON the
+
    table (with a contact shadow and a paper-tape strip), the
+
    heading sits over a soft dark pool so it never fights the
+
    fairy lights, and the moon, lake lights and table glow have
+
    their own gentle animation.
 
    Optional: add this to your <head> for a nicer handwriting:
+
    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+
    ========================================================= */
 
 .page5 {
+
   /* palette */
+
   --p5-rose: #ff8fb8;
+
   --p5-rose-soft: #ffc4dc;
+
   --p5-rose-deep: #d84a86;
+
   --p5-plum: #2a0a22;
+
   --p5-cream: #fff4ec;
+
   --p5-ink: #4a2f36;
+
   --p5-gold: #ffd9a3;
 
   /* type */
+
   --p5-serif: "Cormorant Garamond", Georgia, serif;
+
   --p5-hand: "Caveat", "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
 
   /* nudge the letter sideways if your background needs it (was 30px before) */
+
   --p5-paper-shift: 0px;
 
   position: relative;
+
   width: 100%;
+
   min-height: 100svh;
+
   overflow: hidden;
+
   isolation: isolate;
+
   color: #fff;
+
 }
 
 /* =========================================================
+
    BACKGROUND + CINEMATIC LAYERS
+
    ========================================================= */
 
 .page5-background {
+
   position: fixed;
+
   inset: 0;
+
   z-index: -5;
+
   background-image: url("../../assets/backgrounds/page5-bg.webp");
+
   background-size: cover;
+
   /* 62% keeps the moon on screen on tall phones (the photo is 2:3) */
+
   background-position: 62% center;
+
   background-repeat: no-repeat;
+
   filter: saturate(1.08) contrast(1.04);
+
   transform-origin: 80% 20%;
+
   transform: scale(1.02);
+
   animation: p5-drift 30s ease-in-out infinite alternate;
+
 }
 
 @keyframes p5-drift {
+
   to { transform: scale(1.07) translate3d(-0.8%, -0.6%, 0); }
+
 }
 
 .page5-overlay {
+
   position: fixed;
+
   inset: 0;
+
   z-index: -4;
+
   pointer-events: none;
+
   background:
+
     radial-gradient(ellipse 70% 40% at 50% 14%, rgba(4, 1, 10, 0.55), transparent 75%),
+
     radial-gradient(ellipse 80% 40% at 50% 76%, rgba(255, 140, 90, 0.10), transparent 70%),
+
     radial-gradient(ellipse at center, transparent 48%, rgba(3, 1, 8, 0.55) 100%),
+
     linear-gradient(180deg,
+
       rgba(3, 2, 9, 0.50) 0%,
+
       rgba(8, 3, 16, 0.10) 26%,
+
       rgba(6, 2, 12, 0.06) 52%,
+
       rgba(4, 1, 8, 0.66) 100%);
+
 }
 
 /* moonlight: a cool halo around the moon (top right) that slowly breathes */
+
 .page5-overlay::before {
+
   content: "";
+
   position: absolute;
+
   top: 9%;
+
   right: 4%;
+
   width: 190px;
+
   height: 190px;
+
   transform: translate(0, -50%);
+
   border-radius: 50%;
+
   mix-blend-mode: screen;
+
   background: radial-gradient(circle, rgba(255, 238, 245, 0.42), rgba(190, 170, 255, 0.14) 45%, transparent 70%);
+
   filter: blur(6px);
+
   animation: p5-moon 7s ease-in-out infinite;
+
 }
 
 @keyframes p5-moon {
+
   0%, 100% { opacity: 0.55; transform: translate(0, -50%) scale(0.94); }
+
   50%      { opacity: 1;    transform: translate(0, -50%) scale(1.08); }
+
 }
 
 /* the lights across the lake twinkle */
+
 .page5-overlay::after {
+
   content: "";
+
   position: absolute;
+
   left: 0;
+
   right: 0;
+
   top: 22%;
+
   height: 22%;
+
   background-repeat: no-repeat;
+
   background-image:
+
     radial-gradient(circle at 52% 28%, rgba(255, 200, 120, 0.95) 0 2px, transparent 7px),
+
     radial-gradient(circle at 63% 24%, rgba(255, 190, 110, 0.9) 0 2px, transparent 7px),
+
     radial-gradient(circle at 76% 20%, rgba(255, 205, 130, 0.95) 0 2.5px, transparent 8px),
+
     radial-gradient(circle at 88% 26%, rgba(255, 190, 120, 0.9) 0 2px, transparent 7px),
+
     radial-gradient(circle at 70% 70%, rgba(255, 200, 130, 0.5) 0 2px, transparent 12px),
+
     radial-gradient(circle at 84% 78%, rgba(255, 200, 130, 0.45) 0 2px, transparent 12px);
+
   mix-blend-mode: screen;
+
   animation: p5-twinkle 3.6s ease-in-out infinite alternate;
+
 }
 
 @keyframes p5-twinkle {
+
   from { opacity: 0.35; }
+
   to   { opacity: 1; }
+
 }
 
 /* drifting fireflies / embers (two light layers) */
+
 .page5::before,
+
 .page5::after {
+
   content: "";
+
   position: fixed;
+
   inset: 0;
+
   z-index: -3;
+
   pointer-events: none;
+
   background-repeat: no-repeat;
+
   will-change: transform, opacity;
+
 }
 
 .page5::before {
+
   background-image:
+
     radial-gradient(circle at 12% 72%, rgba(255, 220, 160, 0.95) 0 1.5px, transparent 4px),
+
     radial-gradient(circle at 84% 64%, rgba(255, 190, 215, 0.9) 0 1.5px, transparent 4px),
+
     radial-gradient(circle at 28% 34%, rgba(255, 230, 180, 0.8) 0 1px, transparent 3px),
+
     radial-gradient(circle at 70% 22%, rgba(255, 200, 225, 0.8) 0 1px, transparent 3px),
+
     radial-gradient(circle at 50% 86%, rgba(255, 225, 170, 0.85) 0 1.5px, transparent 4px);
+
   animation: p5-float 9s ease-in-out infinite;
+
 }
 
 .page5::after {
+
   background-image:
+
     radial-gradient(circle at 20% 52%, rgba(255, 215, 170, 0.8) 0 1px, transparent 3px),
+
     radial-gradient(circle at 92% 40%, rgba(255, 185, 210, 0.85) 0 1.5px, transparent 4px),
+
     radial-gradient(circle at 6% 20%, rgba(255, 225, 180, 0.7) 0 1px, transparent 3px),
+
     radial-gradient(circle at 62% 74%, rgba(255, 200, 220, 0.8) 0 1px, transparent 3px);
+
   animation: p5-float 12s ease-in-out -4s infinite reverse;
+
 }
 
 @keyframes p5-float {
+
   0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.35; }
+
   50%      { transform: translate3d(8px, -26px, 0); opacity: 1; }
+
 }
 
 /* =========================================================
+
    TOP BAR
+
    ========================================================= */
 
 .page5-topbar {
+
   position: absolute;
+
   top: max(14px, env(safe-area-inset-top));
+
   left: 0;
+
   right: 0;
+
   padding: 0 16px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   z-index: 30;
+
 }
 
 .page5-back,
+
 .page5-music {
+
   display: flex;
+
   align-items: center;
+
   gap: 7px;
+
   min-height: 36px;
+
   border: 1px solid rgba(255, 215, 231, 0.24);
+
   border-radius: 999px;
+
   background: linear-gradient(145deg, rgba(40, 14, 38, 0.66), rgba(14, 6, 17, 0.7));
+
   backdrop-filter: blur(14px) saturate(140%);
+
   -webkit-backdrop-filter: blur(14px) saturate(140%);
+
   color: rgba(255, 239, 246, 0.92);
+
   font-family: var(--p5-serif);
+
   font-size: 13px;
+
   font-weight: 500;
+
   letter-spacing: 0.02em;
+
   cursor: pointer;
+
   -webkit-tap-highlight-color: transparent;
+
   box-shadow: 0 6px 22px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
 }
 
 .page5-back  { padding: 8px 14px 8px 10px; }
+
 .page5-music { padding: 8px 14px; }
 
 .page5-back:hover,
+
 .page5-music:hover { transform: translateY(-1px); border-color: rgba(255, 160, 200, 0.5); }
 
 .page5-back:active,
+
 .page5-music:active { transform: scale(0.96); }
 
 .page5-music-active {
+
   border-color: rgba(255, 146, 188, 0.6);
+
   color: #ffc0d8;
+
   box-shadow: 0 0 22px rgba(228, 91, 145, 0.32), 0 6px 22px rgba(0, 0, 0, 0.28);
+
 }
 
 /* =========================================================
+
    MAIN CONTENT
+
    ========================================================= */
 
 .page5-content {
+
   position: relative;
+
   width: min(100%, 430px);
+
   min-height: 100svh;
+
   margin: 0 auto;
+
   padding: 72px 17px calc(20px + env(safe-area-inset-bottom));
+
   display: flex;
+
   flex-direction: column;
+
   z-index: 5;
+
 }
 
 /* =========================================================
+
    HEADING
+
    ========================================================= */
 
 .page5-heading {
+
   position: relative;
+
   text-align: center;
+
   text-shadow: 0 3px 20px rgba(0, 0, 0, 0.75);
+
   animation: p5-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s backwards;
+
 }
 
 /* soft dark pool behind the heading keeps it readable over the fairy lights */
+
 .page5-heading::before {
+
   content: "";
+
   position: absolute;
+
   inset: -16px -26px -10px;
+
   z-index: -1;
+
   pointer-events: none;
+
   border-radius: 50%;
+
   background: radial-gradient(ellipse at center, rgba(6, 2, 12, 0.6), transparent 72%);
+
   filter: blur(10px);
+
 }
 
 @keyframes p5-in {
+
   from { opacity: 0; transform: translateY(16px); filter: blur(5px); }
+
 }
 
 .page5-heading-small {
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 9px;
+
   margin-bottom: 7px;
+
   color: rgba(255, 196, 220, 0.95);
+
   font-family: system-ui, sans-serif;
+
   font-size: 9px;
+
   font-weight: 600;
+
   letter-spacing: 0.3em;
+
   text-transform: uppercase;
+
 }
 
 .page5-heading-small::before,
+
 .page5-heading-small::after {
+
   content: "";
+
   width: 22px;
+
   height: 1px;
+
   background: linear-gradient(90deg, transparent, rgba(255, 181, 207, 0.7));
+
 }
+
 .page5-heading-small::after { transform: scaleX(-1); }
 
 .page5-heading h1 {
+
   position: relative;
+
   margin: 0;
+
   color: #fff6f9;
+
   font-family: var(--p5-serif);
+
   font-size: clamp(38px, 11vw, 50px);
+
   font-weight: 500;
+
   line-height: 0.9;
+
   letter-spacing: -0.02em;
+
   text-shadow: 0 0 30px rgba(255, 130, 180, 0.35), 0 3px 18px rgba(0, 0, 0, 0.6);
+
 }
 
 .page5-heading h1 em {
+
   font-style: italic;
+
   font-weight: 500;
+
   background: linear-gradient(100deg, #ff9cc2 10%, #ffd2e4 45%, #ff8db8 80%);
+
   background-size: 200% 100%;
+
   -webkit-background-clip: text;
+
   background-clip: text;
+
   -webkit-text-fill-color: transparent;
+
   color: transparent;
+
   text-shadow: none;
+
   filter: drop-shadow(0 2px 14px rgba(255, 90, 160, 0.45));
+
   animation: p5-shimmer 6s linear infinite;
+
 }
 
 @keyframes p5-shimmer {
+
   to { background-position: -200% 0; }
+
 }
 
 .page5-heading-heart {
+
   display: inline-block;
+
   margin-left: 4px;
+
   color: #ff79ad;
+
   font-family: Georgia, serif;
+
   font-size: 29px;
+
   transform: translateY(-7px) rotate(-10deg);
+
   text-shadow: 0 0 18px rgba(255, 86, 156, 0.8);
+
   animation: p5-beat 2.2s ease-in-out infinite;
+
 }
 
 @keyframes p5-beat {
+
   0%, 100% { transform: translateY(-7px) rotate(-10deg) scale(1); }
+
   14%      { transform: translateY(-7px) rotate(-10deg) scale(1.2); }
+
   28%      { transform: translateY(-7px) rotate(-10deg) scale(1); }
+
   42%      { transform: translateY(-7px) rotate(-10deg) scale(1.12); }
+
 }
 
 .page5-heading p {
+
   margin: 10px auto 0;
+
   max-width: 300px;
+
   color: rgba(255, 241, 247, 0.84);
+
   font-family: var(--p5-serif);
+
   font-size: 14px;
+
   font-style: italic;
+
   line-height: 1.4;
+
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+
 }
 
 /* =========================================================
+
    LETTER COUNT (small pill)
+
    ========================================================= */
 
 .page5-letter-count {
+
   align-self: center;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 8px;
+
   margin: 11px auto 0;
+
   padding: 5px 13px;
+
   border: 1px solid rgba(255, 181, 207, 0.22);
+
   border-radius: 999px;
+
   background: rgba(20, 6, 22, 0.42);
+
   backdrop-filter: blur(8px);
+
   -webkit-backdrop-filter: blur(8px);
+
   color: rgba(255, 207, 224, 0.92);
+
   font-family: system-ui, sans-serif;
+
   font-size: 9.5px;
+
   letter-spacing: 0.16em;
+
   text-transform: uppercase;
+
   animation: p5-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards;
+
 }
 
 .page5-letter-count i {
+
   width: 16px;
+
   height: 1px;
+
   background: rgba(255, 181, 207, 0.55);
+
 }
 
 /* =========================================================
+
    LETTER WRAPPER
+
    ========================================================= */
 
 .page5-letter-wrapper {
+
   position: relative;
+
   width: 100%;
+
   margin-top: 10px;
+
   padding-bottom: 8px;
+
   display: flex;
+
   justify-content: center;
+
   align-items: flex-end;   /* the letter sits low, on the wooden table */
+
   flex: 1;
+
   min-height: 0;
+
 }
 
 /* contact shadow on the wood, under the paper */
+
 .page5-letter-wrapper::after {
+
   content: "";
+
   position: absolute;
+
   left: 50%;
+
   bottom: 0;
+
   width: 80%;
+
   height: 26px;
+
   transform: translateX(-50%);
+
   z-index: 0;
+
   pointer-events: none;
+
   border-radius: 50%;
+
   background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7), transparent 70%);
+
   filter: blur(7px);
+
 }
 
 .page5-paper { z-index: 1; }
 
 /* =========================================================
+
    PAPER (stack of sheets, lit by candle glow)
+
    ========================================================= */
 
 .page5-paper {
+
   position: relative;
+
   width: min(84%, 330px);
+
   min-height: 345px;
+
   margin: 0 auto;
+
   transform: translateX(var(--p5-paper-shift)) rotate(-0.6deg);
+
   transform-origin: center center;
+
   filter: drop-shadow(0 22px 30px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 40px rgba(255, 140, 110, 0.12));
+
   animation: p5-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
 }
 
 @keyframes p5-rise {
+
   from { opacity: 0; transform: translateX(var(--p5-paper-shift)) translateY(26px) rotate(-3deg) scale(0.96); }
+
   to   { opacity: 1; transform: translateX(var(--p5-paper-shift)) translateY(0) rotate(-0.6deg) scale(1); }
+
 }
 
 /* warm candle light spilling behind the letter */
+
 .page5-paper::before {
+
   content: "";
+
   position: absolute;
+
   inset: -34px -28px;
+
   z-index: -1;
+
   pointer-events: none;
+
   border-radius: 50%;
+
   background: radial-gradient(ellipse at center, rgba(255, 168, 118, 0.34), rgba(255, 120, 150, 0.12) 50%, transparent 72%);
+
   filter: blur(12px);
+
   animation: p5-breathe 5s ease-in-out infinite;
+
 }
 
 @keyframes p5-breathe {
+
   0%, 100% { opacity: 0.65; transform: scale(0.97); }
+
   50%      { opacity: 1; transform: scale(1.04); }
+
 }
 
 /* strip of pink washi tape holding the letter to the table */
+
 .page5-paper::after {
+
   content: "";
+
   position: absolute;
+
   top: -11px;
+
   left: 50%;
+
   width: 92px;
+
   height: 24px;
+
   transform: translateX(-50%) rotate(-3deg);
+
   z-index: 6;
+
   pointer-events: none;
+
   border-radius: 2px;
+
   background:
+
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0 4px, transparent 4px 9px),
+
     linear-gradient(180deg, rgba(255, 168, 200, 0.82), rgba(236, 120, 165, 0.78));
+
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+
   clip-path: polygon(0 0, 100% 0, 98% 20%, 100% 40%, 98% 60%, 100% 80%, 98% 100%, 0 100%, 2% 80%, 0 60%, 2% 40%, 0 20%);
+
 }
 
 .page5-paper-back {
+
   position: absolute;
+
   inset: 5px;
+
   border-radius: 3px;
+
   background: linear-gradient(145deg, #c07a86, #a96872);
+
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.32);
+
 }
 
 .page5-paper-back-one { transform: rotate(-2.6deg) translate(-2px, 2px); opacity: 0.85; }
 
 .page5-paper-back-two {
+
   transform: rotate(2deg) translate(3px, 1px);
+
   opacity: 0.7;
+
   background: linear-gradient(145deg, #86576a, #704958);
+
 }
 
 /* =========================================================
+
    MAIN PAPER
+
    ========================================================= */
 
 .page5-paper-inner {
+
   position: absolute;
+
   inset: 0;
+
   padding: 18px 19px;
+
   overflow: hidden;
+
   color: var(--p5-ink);
+
   background:
+
     radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.6), transparent 26%),
+
     radial-gradient(circle at 90% 95%, rgba(214, 140, 130, 0.22), transparent 38%),
+
     linear-gradient(90deg, transparent 49.4%, rgba(150, 90, 80, 0.07) 50%, transparent 50.8%),
+
     linear-gradient(145deg, #fff4ea, #f6e0d3 58%, #eecfc5);
+
   clip-path: polygon(1% 2%, 97% 0%, 100% 96%, 96% 100%, 4% 98%, 0% 94%, 2% 48%, 0% 8%);
+
   box-shadow: inset 0 0 40px rgba(146, 71, 86, 0.1);
+
 }
 
 /* ruled lines + paper fibre */
+
 .page5-paper-inner::before {
+
   content: "";
+
   position: absolute;
+
   inset: 0;
+
   pointer-events: none;
+
   opacity: 0.55;
+
   background:
+
     repeating-linear-gradient(0deg, transparent 0 21px, rgba(150, 100, 100, 0.09) 21px 22px),
+
     radial-gradient(rgba(120, 80, 70, 0.07) 1px, transparent 1.4px) 0 0 / 7px 7px;
+
 }
 
 /* inner border (double rule) */
+
 .page5-paper-inner::after {
+
   content: "";
+
   position: absolute;
+
   inset: 9px;
+
   border: 1px solid rgba(170, 88, 103, 0.22);
+
   outline: 1px solid rgba(170, 88, 103, 0.1);
+
   outline-offset: 3px;
+
   pointer-events: none;
+
 }
 
 /* =========================================================
+
    PAPER DECORATIONS
+
    ========================================================= */
 
 .paper-flower {
+
   position: absolute;
+
   color: rgba(190, 72, 104, 0.8);
+
   font-family: Georgia, serif;
+
   pointer-events: none;
+
   z-index: 2;
+
   filter: drop-shadow(0 1px 1px rgba(120, 30, 60, 0.25));
+
 }
 
 .paper-flower-top    { top: 11px;  right: 14px; font-size: 32px; transform: rotate(17deg); }
+
 .paper-flower-bottom { left: 9px;  bottom: 9px; font-size: 34px; transform: rotate(-12deg); }
 
 .paper-small-heart {
+
   position: absolute;
+
   color: rgba(208, 63, 105, 0.8);
+
   pointer-events: none;
+
   z-index: 2;
+
   animation: p5-beat-sm 3s ease-in-out infinite;
+
 }
 
 .paper-heart-one { right: 25px; bottom: 40px; font-size: 16px; }
+
 .paper-heart-two { left: 22px;  top: 43%;     font-size: 10px; animation-delay: -1.2s; }
 
 @keyframes p5-beat-sm {
+
   0%, 100% { transform: scale(1); }
+
   50%      { transform: scale(1.18); }
+
 }
 
 /* =========================================================
+
    PAPER HEADER
+
    ========================================================= */
 
 .page5-paper-heading {
+
   position: relative;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   color: rgba(151, 73, 89, 0.78);
+
   font-family: var(--p5-serif);
+
   font-size: 11px;
+
   font-style: italic;
+
   z-index: 3;
+
 }
 
 .page5-paper-heading div { color: #bc5c76; }
 
 .page5-paper h2 {
+
   position: relative;
+
   margin: 9px 20px 0;
+
   color: #4a2c35;
+
   font-family: var(--p5-hand);
+
   font-size: clamp(22px, 6vw, 26px);
+
   font-weight: 600;
+
   line-height: 1.05;
+
   text-align: center;
+
   z-index: 3;
+
 }
 
 .paper-divider {
+
   position: relative;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 8px;
+
   margin: 6px 22px 11px;
+
   color: #bb6078;
+
   z-index: 3;
+
 }
 
 .paper-divider span {
+
   width: 34px;
+
   height: 1px;
+
   background: linear-gradient(90deg, transparent, rgba(164, 83, 101, 0.5));
+
 }
+
 .paper-divider span:last-child { transform: scaleX(-1); }
 
 /* =========================================================
+
    HANDWRITTEN CONTENT
+
    ========================================================= */
 
 .page5-handwriting {
+
   position: relative;
+
   z-index: 3;
+
   padding: 0 6px;
+
 }
 
 .page5-handwriting p {
+
   margin: 0 0 8px;
+
   color: #503840;
+
   font-family: var(--p5-hand);
+
   font-size: 15.5px;
+
   font-weight: 500;
+
   line-height: 1.38;
+
   letter-spacing: 0.005em;
+
   animation: p5-ink 0.7s ease both;
+
 }
 
 /* lines appear one after another, like being written */
+
 .page5-handwriting p:nth-child(1) { animation-delay: 0.25s; }
+
 .page5-handwriting p:nth-child(2) { animation-delay: 0.5s; }
+
 .page5-handwriting p:nth-child(3) { animation-delay: 0.75s; }
+
 .page5-handwriting p:nth-child(4) { animation-delay: 1s; }
+
 .page5-handwriting p:nth-child(5) { animation-delay: 1.25s; }
 
 @keyframes p5-ink {
+
   from { opacity: 0; transform: translateY(5px); filter: blur(2px); }
+
   to   { opacity: 1; transform: none; filter: none; }
+
 }
 
 .page5-paper-shayari .page5-handwriting p {
+
   text-align: center;
+
   font-size: 16.5px;
+
   line-height: 1.45;
+
 }
 
 /* =========================================================
+
    PAPER ENDING
+
    ========================================================= */
 
 .page5-paper-ending {
+
   position: absolute;
+
   left: 26px;
+
   right: 25px;
+
   bottom: 17px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: flex-end;
+
   gap: 6px;
+
   color: #965166;
+
   font-family: var(--p5-hand);
+
   font-size: 14px;
+
   font-weight: 600;
+
   z-index: 4;
+
 }
 
 .page5-paper-ending svg { color: #c95477; }
 
 .page5-feather {
+
   position: absolute;
+
   right: 14px;
+
   bottom: 7px;
+
   color: rgba(128, 69, 84, 0.3);
+
   transform: rotate(-22deg);
+
   z-index: 2;
+
 }
 
 /* =========================================================
+
    NAVIGATION
+
    ========================================================= */
 
 .page5-navigation {
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 18px;
+
   margin-top: 8px;
+
   animation: p5-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 1.1s backwards;
+
 }
 
 .page5-nav-arrow {
+
   width: 42px;
+
   height: 42px;
+
   flex: 0 0 42px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border: 1px solid rgba(255, 144, 183, 0.55);
+
   border-radius: 50%;
+
   background: radial-gradient(circle at 35% 30%, rgba(120, 30, 76, 0.75), rgba(54, 8, 34, 0.7));
+
   backdrop-filter: blur(8px);
+
   -webkit-backdrop-filter: blur(8px);
+
   color: #ffb9d4;
+
   box-shadow: 0 0 20px rgba(222, 79, 139, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
   cursor: pointer;
+
   -webkit-tap-highlight-color: transparent;
+
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+
 }
 
 .page5-nav-arrow:hover  { transform: scale(1.08); box-shadow: 0 0 28px rgba(240, 90, 155, 0.45); }
+
 .page5-nav-arrow:active { transform: scale(0.92); }
 
 .page5-nav-disabled,
+
 .page5-nav-disabled:hover {
+
   opacity: 0.28;
+
   cursor: default;
+
   transform: none;
+
   box-shadow: none;
+
 }
 
 .page5-dots {
+
   display: flex;
+
   align-items: center;
+
   gap: 4px;
+
 }
 
 .page5-dot {
+
   min-width: 16px;
+
   height: 22px;
+
   padding: 0;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   border: 0;
+
   background: transparent;
+
   color: #ff9fc5;
+
   cursor: pointer;
+
   -webkit-tap-highlight-color: transparent;
+
 }
 
 .page5-dot span {
+
   width: 6px;
+
   height: 6px;
+
   display: block;
+
   border: 1px solid rgba(255, 176, 207, 0.75);
+
   border-radius: 999px;
+
   transition: width 0.35s cubic-bezier(0.3, 1.4, 0.5, 1), background 0.3s ease;
+
 }
 
 .page5-dot-active { filter: drop-shadow(0 0 8px rgba(255, 79, 148, 0.8)); }
 
 .page5-dot-active span {
+
   width: 20px;
+
   border-color: transparent;
+
   background: linear-gradient(90deg, #ff7eb0, #ffb9d4);
+
 }
 
 /* =========================================================
+
    NEXT BUTTON (shimmer sweep + soft pulse)
+
    ========================================================= */
 
 .page5-next-button {
+
   position: relative;
+
   overflow: hidden;
+
   align-self: center;
+
   min-width: min(86vw, 285px);
+
   margin-top: 10px;
+
   padding: 12px 18px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 8px;
+
   border: 1px solid rgba(255, 160, 198, 0.6);
+
   border-radius: 999px;
+
   background: linear-gradient(135deg, rgba(226, 74, 140, 0.7), rgba(106, 20, 65, 0.78));
+
   color: #fff0f6;
+
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.36), 0 0 30px rgba(224, 77, 140, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
   font-family: var(--p5-serif);
+
   font-size: 16px;
+
   font-weight: 600;
+
   letter-spacing: 0.03em;
+
   cursor: pointer;
+
   -webkit-tap-highlight-color: transparent;
+
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+
   animation: p5-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 1.3s backwards, p5-pulse 3.2s ease-in-out 2.2s infinite;
+
 }
 
 .page5-next-button::after {
+
   content: "";
+
   position: absolute;
+
   top: 0;
+
   bottom: 0;
+
   left: -60%;
+
   width: 40%;
+
   background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+
   transform: skewX(-20deg);
+
   animation: p5-sweep 4.5s ease-in-out infinite;
+
 }
 
 @keyframes p5-sweep {
+
   0%, 55% { left: -60%; }
+
   100%    { left: 130%; }
+
 }
 
 @keyframes p5-pulse {
+
   0%, 100% { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.36), 0 0 24px rgba(224, 77, 140, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18); }
+
   50%      { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.36), 0 0 42px rgba(240, 90, 155, 0.5),  inset 0 1px 0 rgba(255, 255, 255, 0.18); }
+
 }
 
 .page5-next-button:hover  { transform: translateY(-2px); }
+
 .page5-next-button:active { transform: scale(0.97); }
 
 .page5-next-final {
+
   background: linear-gradient(135deg, rgba(240, 110, 168, 0.75), rgba(116, 52, 146, 0.78));
+
 }
 
 /* =========================================================
+
    BOTTOM HEART
+
    ========================================================= */
 
 .page5-bottom-heart {
+
   position: absolute;
+
   bottom: 7px;
+
   left: 50%;
+
   transform: translateX(-50%);
+
   color: rgba(236, 107, 158, 0.6);
+
   pointer-events: none;
+
   animation: p5-beat-sm 2.6s ease-in-out infinite;
+
 }
 
 /* =========================================================
+
    SHORT PHONES
+
    ========================================================= */
 
 @media (max-height: 740px) {
+
   .page5-content { padding-top: 66px; }
+
   .page5-heading h1 { font-size: 35px; }
+
   .page5-heading p { margin-top: 7px; font-size: 12.5px; }
+
   .page5-letter-count { margin-top: 7px; }
+
   .page5-letter-wrapper { margin-top: 7px; }
+
   .page5-paper { min-height: 350px; }
+
   .page5-paper-inner { padding: 17px 19px; }
+
   .page5-handwriting p { margin-bottom: 6px; font-size: 14.5px; }
+
   .page5-paper-shayari .page5-handwriting p { font-size: 15.5px; }
+
   .page5-navigation { margin-top: 5px; }
+
   .page5-nav-arrow { width: 38px; height: 38px; flex-basis: 38px; }
+
   .page5-next-button { margin-top: 6px; padding: 9px 16px; }
+
 }
 
 /* =========================================================
+
    SMALL WIDTH
+
    ========================================================= */
 
 @media (max-width: 360px) {
+
   .page5-content { padding-left: 12px; padding-right: 12px; }
+
   .page5-heading h1 { font-size: 33px; }
+
   .page5-paper { min-height: 350px; }
+
   .page5-paper-inner { padding: 17px; }
+
   .page5-handwriting p { font-size: 14px; line-height: 1.34; }
+
   .page5-paper h2 { font-size: 21px; }
+
   .page5-navigation { gap: 12px; }
+
   .page5-next-button { min-width: 255px; font-size: 14.5px; }
+
 }
 
 /* =========================================================
+
    REDUCED MOTION
+
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+
   .page5-background,
+
   .page5-overlay::before,
+
   .page5-overlay::after,
+
   .page5-heading,
+
   .page5-letter-count,
+
   .page5-navigation,
+
   .page5::before,
+
   .page5::after,
+
   .page5-paper,
+
   .page5-paper::before,
+
   .page5-heading h1 em,
+
   .page5-heading-heart,
+
   .paper-small-heart,
+
   .page5-bottom-heart,
+
   .page5-handwriting p,
+
   .page5-next-button,
+
   .page5-next-button::after {
+
     animation: none;
+
   }
+
+}
+
+
+
+/* =========================================================
+   PAGE NAVIGATION — matching Page6's wooden hanging menu
+   ========================================================= */
+.page5-menu {
+  position: absolute;
+  top: 66px;
+  left: 10px;
+  width: 28%;
+  min-width: 104px;
+  max-width: 130px;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.page5-menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 8px 6px 14px;
+  border: 0;
+  border-radius: 3px;
+  color: #5a3326;
+  font-family: var(--p5-serif);
+  font-size: 12.5px;
+  font-style: italic;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  background:
+    radial-gradient(circle at 6px 50%, #6a4a30 0 1.8px, transparent 2.4px),
+    radial-gradient(circle at calc(100% - 6px) 50%, #6a4a30 0 1.8px, transparent 2.4px),
+    repeating-linear-gradient(92deg, rgba(120, 78, 44, 0.12) 0 2px, transparent 2px 7px),
+    linear-gradient(135deg, #e3c59d, #c79f72 55%, #b98d62);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 10px rgba(0, 0, 0, 0.42);
+  transform: rotate(-0.8deg);
+  transition: transform 0.22s ease, filter 0.22s ease;
+  animation: p5-plank-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+.page5-menu-item:nth-child(even) { transform: rotate(0.8deg); }
+.page5-menu-item:nth-child(1) { animation-delay: 0.15s; }
+.page5-menu-item:nth-child(2) { animation-delay: 0.25s; }
+
+@keyframes p5-plank-in { from { opacity: 0; translate: -30px 0; } }
+.page5-menu-item:hover:not(:disabled) { transform: translateX(3px) rotate(0); filter: brightness(1.08); }
+.page5-menu-item:active:not(:disabled) { transform: scale(0.96); }
+.page5-menu-item:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.page5-menu-item svg { flex: 0 0 auto; opacity: 0.85; }
+.page5-menu-item:disabled { cursor: default; }
+
+.page5-menu-active {
+  color: #fff;
+  background: linear-gradient(135deg, #ff9fc8, #df4f91 60%, #c93779);
+  text-shadow: 0 1px 7px rgba(100, 0, 50, 0.55);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 0 1px rgba(255, 220, 238, 0.7), 0 0 24px rgba(255, 90, 165, 0.75), 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.page5-menu-active::before,
+.page5-menu-active::after {
+  content: "✿";
+  position: absolute;
+  color: #ff9ec9;
+  font-size: 15px;
+  text-shadow: 0 0 8px rgba(255, 80, 160, 0.9);
+  pointer-events: none;
+}
+.page5-menu-active::before { left: -7px; top: -7px; }
+.page5-menu-active::after { right: -6px; bottom: -7px; font-size: 13px; }
+
+/* Hanging sign on the opposite side, framing the title like Page6. */
+.page5-sign {
+  position: absolute;
+  top: 96px;
+  right: 10px;
+  width: 24%;
+  min-width: 84px;
+  max-width: 100px;
+  z-index: 24;
+  padding: 11px 6px 8px;
+  border-radius: 3px;
+  text-align: center;
+  color: #5a3326;
+  background: repeating-linear-gradient(94deg, rgba(120, 78, 44,  0.12) 0 2px, transparent 2px 8px), linear-gradient(145deg, #ecd3ad, #d2ac7d 60%, #c19a6b);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 8px 16px rgba(0, 0, 0, 0.45);
+  transform-origin: 50% -28px;
+  animation: p5-sway 6s ease-in-out infinite alternate, p5-sign-fade 1s ease 0.6s backwards;
+}
+.page5-sign p { margin: 0; font-family: var(--p5-hand); font-size: 15px; font-weight: 600; line-height: 1.08; }
+.page5-sign svg { margin-top: 3px; color: #d6355f; }
+.page5-sign::before,
+.page5-sign::after {
+  content: ""; position: absolute; top: -30px; width: 1.5px; height: 32px;
+  background: linear-gradient(180deg, #5d4430, #8f6f4e); transform-origin: bottom center;
+}
+.page5-sign::before { left: 18%; transform: rotate(12deg); }
+.page5-sign::after { right: 18%; transform: rotate(-12deg); }
+@keyframes p5-sway { from { transform: rotate(2.4deg); } to { transform: rotate(-1.6deg); } }
+@keyframes p5-sign-fade { from { opacity: 0; } }
+
+/* Keep the heading in the open space between the wooden menu and sign. */
+.page5-heading { width: 48%; margin-left: 27%; }
+.page5-heading h1 { font-size: clamp(31px, 8.6vw, 39px); line-height: 0.96; }
+.page5-heading p { max-width: 190px; font-size: 12.5px; }
+.page5-heading-small { font-size: 8px; letter-spacing: 0.2em; gap: 5px; }
+.page5-heading-small::before,
+.page5-heading-small::after { width: 13px; }
+.page5-heading-heart { font-size: 23px; }
+
+@media (max-width: 360px) {
+  .page5-menu { left: 6px; min-width: 96px; gap: 4px; }
+  .page5-menu-item { min-height: 30px; padding: 4px 6px 4px 11px; font-size: 11.5px; }
+  .page5-menu-item svg { display: none; }
+  .page5-sign { right: 6px; min-width: 76px; width: 22%; padding: 9px 4px 7px; }
+  .page5-sign p { font-size: 13px; }
+  .page5-heading { width: 47%; margin-left: 27%; }
+  .page5-heading h1 { font-size: 30px; }
+  .page5-heading p { font-size: 11px; }
+}
+
+@media (max-height: 740px) {
+  .page5-menu { top: 60px; gap: 4px; }
+  .page5-menu-item { min-height: 30px; padding-top: 4px; padding-bottom: 4px; font-size: 12px; }
+  .page5-sign { top: 88px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page5-menu-item, .page5-sign { animation: none !important; }
 }

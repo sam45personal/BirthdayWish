@@ -5,21 +5,23 @@
    stitched leather, brass corners, ribbon bookmark.
 ========================================================= */
 
+
+/* ---------- 3D page-turn engine ---------- */
+
 .memory-book {
   --flip: 1.1s;
-
-  /* The book has a drop-shadow filter, which flattens 3D from its parent,
-     so the turning leaf needs perspective set on the book itself. */
   perspective: 1600px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
 }
-
-/* ---------- page slots (each holds ONE photo page) ---------- */
 
 .album-slot {
   position: relative;
   flex: 0 0 50%;
   width: 50%;
   height: 100%;
+  min-width: 0;
+  transform-style: preserve-3d;
 }
 
 .album-slot .memory-page,
@@ -28,14 +30,12 @@
   height: 100%;
 }
 
-/* ---------- the turning leaf ---------- */
-
 .page-leaf {
   position: absolute;
   top: 0;
   width: 50%;
   height: 100%;
-  z-index: 12;
+  z-index: 40;
   transform-style: preserve-3d;
   pointer-events: none;
   will-change: transform;
@@ -54,12 +54,18 @@
 .leaf-face {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  transform-style: preserve-3d;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
+.leaf-front {
+  transform: rotateY(0deg) translateZ(0.1px);
+}
+
 .leaf-back {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(0.1px);
 }
 
 /* fold shading: page darkens as it lifts, brightens as it lands */
@@ -80,8 +86,9 @@
   animation: leaf-lighten var(--flip) ease-out forwards;
 }
 
-.page-leaf-next .leaf-front .leaf-shade,
-.page-leaf-prev .leaf-back .leaf-shade {
+
+/* Forward: leaf turns from right to left */
+.page-leaf-next .leaf-front .leaf-shade {
   background: linear-gradient(
     90deg,
     rgba(48, 14, 26, 0.6),
@@ -89,7 +96,15 @@
   );
 }
 
-.page-leaf-next .leaf-back .leaf-shade,
+.page-leaf-next .leaf-back .leaf-shade {
+  background: linear-gradient(
+    270deg,
+    rgba(48, 14, 26, 0.5),
+    transparent 85%
+  );
+}
+
+/* Backward: leaf turns from left to right */
 .page-leaf-prev .leaf-front .leaf-shade {
   background: linear-gradient(
     270deg,
@@ -97,6 +112,15 @@
     rgba(48, 14, 26, 0.04) 85%
   );
 }
+
+.page-leaf-prev .leaf-back .leaf-shade {
+  background: linear-gradient(
+    90deg,
+    rgba(48, 14, 26, 0.5),
+    transparent 85%
+  );
+}
+
 
 @keyframes leaf-darken {
   to {

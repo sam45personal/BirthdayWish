@@ -6,10 +6,18 @@ import Page3 from "./pages/Page3/Page3";
 import Page4 from "./pages/Page4/Page4";
 import Page5 from "./pages/Page5/Page5";
 import Page6 from "./pages/Page6/Page6";
+import Page7 from "./pages/Page7/Page7";
+import Page8 from "./pages/Page8/Page8";
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
-
+/* const [currentPage, setCurrentPage] = useState(() => {
+    const savedPage = sessionStorage.getItem("birthdayAppCurrentPage");
+    return savedPage ? parseInt(savedPage, 10) : 1;
+  });
+  useEffect(() => {
+    sessionStorage.setItem("birthdayAppCurrentPage", currentPage);
+  }, [currentPage]); */
   return (
     <>
       {currentPage === 1 && (
@@ -74,6 +82,25 @@ function App() {
             if (page === "Page5") setCurrentPage(5);
             if (page === "Page7") setCurrentPage(7);
             if (page === "Page8") setCurrentPage(8);
+          }}
+        />
+      )}
+
+      {currentPage === 7 && (
+        <Page7
+          onNavigate={(page) => {
+            if (page === "Page5") setCurrentPage(5);
+            if (page === "Page6") setCurrentPage(6);
+            if (page === "Page8") setCurrentPage(8);
+          }}
+        />
+      )}
+
+      {currentPage === 8 && (
+        <Page8
+          onNavigate={(page) => {
+            if (page === "Page6") setCurrentPage(6);
+            if (page === "Page7") setCurrentPage(7);
           }}
         />
       )}
