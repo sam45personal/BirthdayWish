@@ -59,7 +59,8 @@ function BirthdayTitle() {
           ease: "easeOut",
         }}
       >
-        My Love, Mub
+        Meri Jaan,
+        Mubbs
         <span> ♥ </span>
       </motion.h2>
 

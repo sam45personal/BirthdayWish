@@ -92,7 +92,7 @@ const LETTERS = [
 
       "There are so many little things I feel but don't always know how to say.",
 
-      "Sometimes I simply look at you and feel that im so much lucky that you are part of my life, sorry not a part you are my whole life.",
+      "Sometimes I simply look at you and feel that im so lucky that you are part of my life, sorry not a part you are my whole life.",
 
       "You may not realize it, but your presence has a way of making difficult days feel lighter.",
 
@@ -381,11 +381,11 @@ function Page5({ onNavigate }) {
       {/* Hanging wooden sign — same motif as Page6 */}
       <div className="page5-sign" aria-hidden="true">
         <p>
-          Different<br />
-          Moments<br />
-          Same<br />
-          Happiness<br />
-          Always Us
+          Samandar<br />
+          ka pani<br />
+          khara khara<br />
+          Meri jaan<br />
+          Always Pyari Pyari
         </p>
         <Heart size={11} fill="currentColor" />
       </div>

@@ -8,6 +8,7 @@ import Page5 from "./pages/Page5/Page5";
 import Page6 from "./pages/Page6/Page6";
 import Page7 from "./pages/Page7/Page7";
 import Page8 from "./pages/Page8/Page8";
+import Page9 from "./pages/Page9/Page9";
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,6 +57,9 @@ function App() {
             if (page === "Page7") {
               setCurrentPage(7);
             }
+            if (page === "Page9") {
+              setCurrentPage(9);
+            }
           }}
         />
       )}
@@ -89,6 +93,7 @@ function App() {
       {currentPage === 7 && (
         <Page7
           onNavigate={(page) => {
+            if (page === "Page4") setCurrentPage(4); // "Back to Gifts" button on Page 7
             if (page === "Page5") setCurrentPage(5);
             if (page === "Page6") setCurrentPage(6);
             if (page === "Page8") setCurrentPage(8);
@@ -101,6 +106,21 @@ function App() {
           onNavigate={(page) => {
             if (page === "Page6") setCurrentPage(6);
             if (page === "Page7") setCurrentPage(7);
+            if (page === "Page9") setCurrentPage(9); // after the paper plane flies away
+          }}
+        />
+      )}
+
+      {currentPage === 9 && (
+        <Page9
+          onNavigate={(page) => {
+            if (page === "Page1") setCurrentPage(1);
+            if (page === "Page2") setCurrentPage(2); // Experience It Again
+            if (page === "Page4") setCurrentPage(4); // Home
+            if (page === "Page5") setCurrentPage(5); // Love Letter
+            if (page === "Page6") setCurrentPage(6); // Our Memories
+            if (page === "Page7") setCurrentPage(7); // Our Universe
+            if (page === "Page8") setCurrentPage(8); // Send Message
           }}
         />
       )}

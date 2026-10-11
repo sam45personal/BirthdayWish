@@ -1,13 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
   Heart,
   Camera,
   MoonStar,
   BookOpen,
   ArrowRight,
-  Music2,
+  Home,
 } from "lucide-react";
 
 import "./Page4.css";
@@ -52,55 +51,25 @@ function Page4({ onNavigate }) {
     }
   };
 
-  const handleBack = () => {
-    if (onNavigate) {
-      onNavigate("Page3");
-    }
-  };
-
   return (
     <main className="page4">
-      {/* =====================================================
-          CINEMATIC BACKGROUND
-          ===================================================== */}
-
+      {/* Cinematic background */}
       <div className="page4-background" aria-hidden="true" />
-
-      {/* Dark readability overlay */}
       <div className="page4-overlay" aria-hidden="true" />
 
-      {/* =====================================================
-          TOP CONTROLS
-          ===================================================== */}
-
-      <motion.button
-        className="page4-back"
-        onClick={handleBack}
-        whileTap={{ scale: 0.93 }}
-        aria-label="Go back to birthday"
-      >
-        <ArrowLeft size={16} />
-        <span>Back</span>
-      </motion.button>
-
-      <motion.button
-        className="page4-music"
-        whileTap={{ scale: 0.93 }}
-        aria-label="Music"
-      >
-        <Music2 size={15} />
-        <span>Music On</span>
-      </motion.button>
-
-      {/* =====================================================
-          MAIN CONTENT
-          ===================================================== */}
-
+      {/* Main content */}
       <section className="page4-content">
-
-        {/* ---------------------------------------------------
-            HEADER
-            --------------------------------------------------- */}
+        
+        {/* Home button */}
+        <motion.button
+          className="page4-home"
+          onClick={() => onNavigate("Page9")}
+          whileTap={{ scale: 0.93 }}
+          aria-label="Return to birthday home"
+        >
+          <Home size={14} />
+          <span></span>
+        </motion.button>
 
         <motion.header
           className="page4-header"
@@ -117,9 +86,7 @@ function Page4({ onNavigate }) {
             <span />
           </div>
 
-          <p className="page4-eyebrow">
-            JUST FOR YOU
-          </p>
+          <p className="page4-eyebrow">JUST FOR YOU</p>
 
           <h1>
             I Have
@@ -127,9 +94,7 @@ function Page4({ onNavigate }) {
             <em>Something Special</em>
             <br />
             For You...
-            <span className="page4-heading-heart">
-              ♡
-            </span>
+            <span className="page4-heading-heart">♡</span>
           </h1>
 
           <p className="page4-intro">
@@ -138,10 +103,7 @@ function Page4({ onNavigate }) {
           </p>
         </motion.header>
 
-        {/* ---------------------------------------------------
-            GIFT CARDS
-            --------------------------------------------------- */}
-
+        {/* Gift cards */}
         <div className="page4-gifts">
           {gifts.map((gift, index) => {
             const Icon = gift.icon;
@@ -166,19 +128,11 @@ function Page4({ onNavigate }) {
                   delay: 0.3 + index * 0.13,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                whileTap={{
-                  scale: 0.97,
-                }}
+                whileTap={{ scale: 0.97 }}
               >
-                {/* Glow */}
                 <span className="gift-card-glow" />
+                <span className="gift-number">{gift.number}</span>
 
-                {/* Number */}
-                <span className="gift-number">
-                  {gift.number}
-                </span>
-
-                {/* Icon */}
                 <span className="gift-icon-wrap">
                   <Icon
                     size={21}
@@ -187,16 +141,9 @@ function Page4({ onNavigate }) {
                   />
                 </span>
 
-                {/* Text */}
                 <span className="gift-copy">
-                  <span className="gift-title">
-                    {gift.title}
-                  </span>
-
-                  <span className="gift-subtitle">
-                    {gift.subtitle}
-                  </span>
-
+                  <span className="gift-title">{gift.title}</span>
+                  <span className="gift-subtitle">{gift.subtitle}</span>
                   <span className="gift-open">
                     {gift.button}
                     <ArrowRight size={14} />
@@ -207,34 +154,17 @@ function Page4({ onNavigate }) {
           })}
         </div>
 
-        {/* ---------------------------------------------------
-            BOTTOM MESSAGE
-            --------------------------------------------------- */}
-
+        {/* Bottom message */}
         <motion.div
           className="page4-bottom"
-          initial={{
-            opacity: 0,
-            y: 10,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 1.15,
-            duration: 0.7,
-          }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.15, duration: 0.7 }}
         >
           <Heart size={11} fill="currentColor" />
-
-          <span>
-            Made with love, only for you
-          </span>
-
+          <span>Made with love, only for you</span>
           <Heart size={11} fill="currentColor" />
         </motion.div>
-
       </section>
     </main>
   );
