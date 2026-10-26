@@ -70,7 +70,7 @@ const memorySlides = [
 
       {
 
-        image: "/memories/memory-01.png",
+        image: "/memories/memory-01.jpg",
 
         caption: "That day... everything felt so right.",
 
