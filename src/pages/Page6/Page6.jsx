@@ -100,7 +100,7 @@ const memorySlides = [
 
       {
 
-        image: "/memories/memory-03.jpg",
+        image: "/memories/memory-003.jpg",
 
         caption: "Every little adventure became special...",
 
