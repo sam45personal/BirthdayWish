@@ -168,7 +168,7 @@ const memorySlides = [
 
       {
 
-        image: "/memories/memory-01.jpg",
+        image: "/memories/memory-08.jpg",
 
         caption: "I hope we keep creating many more.",
 
