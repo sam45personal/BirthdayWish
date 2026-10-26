@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SECRET_CODE = "1913"; // The secret code to unlock the next page.
+const SECRET_CODE = "3911"; // The secret code to unlock the next page.
 
 export default function useSecretCode(onSuccess) {
   const [code, setCode] = useState("");
